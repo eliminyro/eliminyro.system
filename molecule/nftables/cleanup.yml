@@ -1,0 +1,31 @@
+---
+- name: "Cleanup"
+  hosts: "all"
+  become: True
+  tasks:
+    - name: "Cleanup | Flush nftables ruleset"
+      ansible.builtin.command: "nft flush ruleset"
+      changed_when: False
+      failed_when: False
+
+    - name: "Cleanup | Stop nftables service"
+      ansible.builtin.systemd:
+        name: "nftables"
+        state: "stopped"
+      failed_when: False
+
+    - name: "Cleanup | Disable nftables service"
+      ansible.builtin.systemd:
+        name: "nftables"
+        enabled: False
+      failed_when: False
+
+    - name: "Cleanup | Remove nftables configuration file"
+      ansible.builtin.file:
+        path: "/etc/nftables.conf"
+        state: "absent"
+
+    - name: "Cleanup | Remove nftables package"
+      ansible.builtin.package:
+        name: "nftables"
+        state: "absent"

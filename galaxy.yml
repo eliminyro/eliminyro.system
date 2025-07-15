@@ -1,0 +1,32 @@
+---
+namespace: eliminyro
+name: system
+version: 0.1.0
+description: Ansible collection for managing various system configurations and services.
+readme: README.md
+authors:
+  - Pavel Eliminyro
+license:
+  - GPL-3.0-or-later
+repository: https://github.com/eliminyro/eliminyro.system
+issues: https://github.com/eliminyro/eliminyro.system/issues
+tags:
+  - system
+  - linux
+  - ansible
+dependencies:
+  ansible.posix: ">=1.6.2"
+build_ignore:
+  - ".git"
+  - ".github"
+  - ".gitignore"
+  - ".ansible-lint"
+  - ".yamllint"
+  - ".ansible"
+  - ".vscode"
+  - "molecule"
+  - "tests"
+  - "files"
+  - "*.pyc"
+  - "__pycache__"
+  - ".DS_Store"

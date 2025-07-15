@@ -1,0 +1,30 @@
+---
+
+- name: "Users | Create users with specific options"
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    uid: "{{ item.uid | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+    groups: "{{ item.groups | default(omit) }}"
+    home: "{{ item.home | default(omit) }}"
+    create_home: "{{ item.home | default(True) }}"
+    shell: "{{ item.shell | default('/bin/bash') }}"
+    state: "present"
+  loop: "{{ users_create }}"
+  when: users_create is defined and users_create | length > 1
+
+- name: "Users | Add SSH keys to authorized_keys"
+  ansible.posix.authorized_key:
+    user: "{{ item.name }}"
+    state: "present"
+    key: "{{ item.pub_key }}"
+  loop: "{{ users_create }}"
+  when: item.pub_key is defined and item.pub_key != ""
+
+- name: "Users | Delete users"
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    state: "absent"
+    remove: "{{ item.remove | default(True) }}"
+  loop: "{{ users_delete }}"
+  when: users_delete is defined and users_delete | length > 1

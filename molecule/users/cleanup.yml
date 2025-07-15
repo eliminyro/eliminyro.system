@@ -1,0 +1,11 @@
+---
+- name: "Cleanup"
+  hosts: "all"
+  become: True
+  tasks:
+    - name: "Cleanup | Remove test users"
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        state: "absent"
+        remove: True
+      loop: "{{ users_create }}"

@@ -1,0 +1,16 @@
+---
+# Variables for users role testing
+users_create:
+  - name: "testuser1"
+    groups: "sudo"
+    uid: 100500
+    shell: "/bin/bash"
+    pub_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEMTSDu1Qzkwm9VmvSEkpLPfCMUGs7FiONE1uxYW2ceY molecule-test"
+  - name: "testuser2"
+    groups: "users"
+    uid: 100501
+    shell: "/bin/sh"
+
+users_delete:
+  - name: "usertodelete1"
+  - name: "usertodelete2"

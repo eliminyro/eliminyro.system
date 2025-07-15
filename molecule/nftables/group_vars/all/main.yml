@@ -1,0 +1,25 @@
+---
+nftables_enabled: True
+nftables_state: "started"
+
+nftables_ipv4_policy_input: "drop"
+nftables_ipv4_policy_output: "accept"
+nftables_ipv4_policy_forward: "accept"
+
+nftables_ipv6_policy_input: "drop"
+nftables_ipv6_policy_output: "accept"
+nftables_ipv6_policy_forward: "accept"
+
+nftables_ipv4_input_rules:
+  - "ct state invalid drop comment \"early drop of invalid connections\""
+  - "ct state established,related accept comment \"allow tracked connections\""
+  - "iif \"lo\" accept comment \"allow loopback\""
+  - "tcp dport 22 accept comment \"allow SSH\""
+  - "tcp dport 80 accept comment \"allow HTTP\""
+  - "tcp dport 443 accept comment \"allow HTTPS\""
+
+nftables_ipv6_input_rules:
+  - "ct state invalid drop comment \"early drop of invalid connections\""
+  - "ct state established,related accept comment \"allow tracked connections\""
+  - "iif \"lo\" accept comment \"allow loopback\""
+  - "tcp dport 22 accept comment \"allow SSH\""

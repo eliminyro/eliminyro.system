@@ -1,0 +1,6 @@
+---
+
+users_create:
+  - name: "debian"
+    groups: "wheel"
+    uid: 1000
