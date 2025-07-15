@@ -1,0 +1,50 @@
+# This file is managed by Ansible. Do not edit it manually.
+
+flush ruleset
+
+table ip filter {
+    chain input {
+        type filter hook input priority 0
+        policy {{ nftables_ipv4_policy_input }}
+{% for rule in nftables_ipv4_input_rules %}
+        {{ rule }}
+{% endfor %}
+    }
+    chain output {
+        type filter hook output priority 0
+        policy {{ nftables_ipv4_policy_output }}
+{% for rule in nftables_ipv4_output_rules %}
+        {{ rule }}
+{% endfor %}
+    }
+    chain forward {
+        type filter hook forward priority 0
+        policy {{ nftables_ipv4_policy_forward }}
+{% for rule in nftables_ipv4_forward_rules %}
+        {{ rule }}
+{% endfor %}
+    }
+}
+table ip6 filter {
+    chain input {
+        type filter hook input priority 0
+        policy {{ nftables_ipv6_policy_input }}
+{% for rule in nftables_ipv6_input_rules %}
+        {{ rule }}
+{% endfor %}
+    }
+    chain output {
+        type filter hook output priority 0
+        policy {{ nftables_ipv6_policy_output }}
+{% for rule in nftables_ipv6_output_rules %}
+        {{ rule }}
+{% endfor %}
+    }
+    chain forward {
+        type filter hook forward priority 0
+        policy {{ nftables_ipv6_policy_forward }}
+{% for rule in nftables_ipv6_forward_rules %}
+        {{ rule }}
+{% endfor %}
+    }
+}

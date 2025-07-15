@@ -1,0 +1,32 @@
+---
+- name: "NFtables | Install nftables"
+  ansible.builtin.package:
+    name: "nftables"
+    state: "present"
+
+- name: "NFtables | Gather service facts"
+  ansible.builtin.service_facts:
+
+- name: "NFtables | Set variables with nftables service state and enabled status"
+  ansible.builtin.set_fact:
+    nftables_service_info:
+      state: "{{ ansible_facts.services['nftables.service'].state | default('not_installed') }}"
+      enabled: "{{ ansible_facts.services['nftables.service'].status == 'enabled' }}"
+
+- name: "NFtables | Render nftables ruleset config"
+  ansible.builtin.template:
+    src: "nftables.conf.j2"
+    dest: "/etc/nftables.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+    backup: True
+    validate: "nft -c -f %s"
+  notify: "Reload nftables"
+
+- name: "NFtables | Ensure nftables service is enabled and started"
+  ansible.builtin.service:
+    name: "nftables"
+    enabled: "{{ nftables_enabled }}"
+    state: "{{ nftables_state }}"
+  when: (nftables_service_info.state != nftables_state) or (nftables_service_info.enabled != nftables_enabled)
