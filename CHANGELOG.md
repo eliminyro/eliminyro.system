@@ -6,6 +6,65 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2025-08-04
+
+### Changes
+- [MAJOR] Improved roles and added the molecule test suite (fe865d4)
+- [INIT] Initial commit (64dfc68)
+
+### Added
+
+- **Molecule testing infrastructure** - Complete molecule scenarios for all
+  roles
+
+  - Created molecule directory structure with individual scenarios for each role
+  - Added centralized group_vars configuration for test variables
+  - Implemented testinfra verification suites for comprehensive testing
+
+- **Users role molecule scenario**
+
+  - Full test coverage for user creation, group assignment, SSH keys, and shell
+    validation
+  - User deletion testing with proper cleanup verification
+  - Prepare stage ensuring required groups exist before user creation
+  - Cleanup stage for proper test environment teardown
+  - Dynamic testing using Ansible variables instead of hardcoded values
+
+- **Nftables role molecule scenario**
+
+  - Complete firewall configuration testing including service management
+  - IPv4 and IPv6 rule validation with policy enforcement testing
+  - Configuration file validation and active ruleset verification
+  - Basic connectivity testing to ensure firewall functionality
+  - Cleanup stage for complete nftables removal and environment reset
+  - Host fixture with sudo privileges for privileged operations
+
+- **Packages role molecule scenario**
+  - Multi-platform testing support (Ubuntu, Debian, ArchLinux)
+  - Dynamic package installation verification across different distributions
+
+### Enhanced
+
+- **Test organization** - Structured tests using class-based organization
+  following collection best practices
+- **Cross-platform compatibility** - Tests handle distribution differences
+  (group variations, package managers)
+- **Error handling** - Comprehensive error messages and graceful handling of
+  optional configuration fields
+- **Documentation** - Inline documentation and clear test descriptions for
+  maintainability
+
+### Technical Improvements
+
+- **Ansible variable integration** - All tests dynamically use Ansible variables
+  from group_vars
+- **Testinfra fixtures** - Proper conftest.py setup with ansible_vars and host
+  fixtures
+- **Molecule configuration** - Optimized molecule.yml configurations for
+  efficient testing
+- **Prepare/cleanup stages** - Proper test environment setup and teardown
+  procedures
+
 ## [Unreleased]
 
 ### Added

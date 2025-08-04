@@ -1,7 +1,7 @@
 ---
 namespace: eliminyro
 name: system
-version: 0.1.0
+version: 1.0.0
 description: Ansible collection for managing various system configurations and services.
 readme: README.md
 authors:

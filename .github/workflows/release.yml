@@ -174,8 +174,8 @@ jobs:
           # Create backup of current changelog
           cp CHANGELOG.md CHANGELOG.md.bak
 
-          # Find the line number where the first version entry starts
-          FIRST_VERSION_LINE=$(grep -n "^## \[" CHANGELOG.md.bak | head -1 | cut -d: -f1)
+          # Find the [Unreleased] section to remove it
+          unreleased_line=$(grep -n "^## \[Unreleased\]" CHANGELOG.md.bak | head -1 | cut -d: -f1)
           
           # Write header
           echo "# Changelog" > CHANGELOG.md.new
@@ -191,9 +191,21 @@ jobs:
           cat /tmp/changelog.md >> CHANGELOG.md.new
           echo "" >> CHANGELOG.md.new
 
-          # Append existing version entries if they exist
-          if [ -n "$FIRST_VERSION_LINE" ]; then
-            tail -n +$FIRST_VERSION_LINE CHANGELOG.md.bak >> CHANGELOG.md.new
+          # Append existing version entries, excluding the [Unreleased] section
+          if [ -n "$unreleased_line" ]; then
+            # If there's an [Unreleased] section, skip it and everything until the next version
+            next_version_line=$(tail -n +$((unreleased_line + 1)) CHANGELOG.md.bak | grep -n "^## \[" | head -1 | cut -d: -f1)
+            if [ -n "$next_version_line" ]; then
+              # Calculate the actual line number in the file for the next version
+              actual_next_line=$((unreleased_line + next_version_line))
+              tail -n +$actual_next_line CHANGELOG.md.bak >> CHANGELOG.md.new
+            fi
+          else
+            # No [Unreleased] section, find the first version entry and append from there
+            FIRST_VERSION_LINE=$(grep -n "^## \[" CHANGELOG.md.bak | head -1 | cut -d: -f1)
+            if [ -n "$FIRST_VERSION_LINE" ]; then
+              tail -n +$FIRST_VERSION_LINE CHANGELOG.md.bak >> CHANGELOG.md.new
+            fi
           fi
 
           mv CHANGELOG.md.new CHANGELOG.md
